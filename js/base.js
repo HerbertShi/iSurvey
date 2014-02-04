@@ -84,21 +84,10 @@ var gender ={
 (function($) {
     $.fn.extend({
         tmp: function(url, data) {
-            var loading = $("<div></div>").css({
-                //"background-color":"red",
-                "position": "absolute",
-                "left": 0,
-                "top": 0,
-                "width": "100%",
-                "height": "100%",
-                "background":"url(images/loading.gif) center center no-repeat"
-            });
-
             var _this = this;
-            $(_this).append(loading);
             $('<div></div>').load(url, function() {
+                $(_this).empty();
                 $(this).tmpl(data).appendTo($(_this));
-                loading.remove();
             });
         }
     });

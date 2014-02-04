@@ -1,0 +1,26 @@
+@import url(reset.css); 
+
+#main>div {
+    /*border: 1px solid #000;*/
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+#header{
+    background-color: #ccc;
+    height:120px;
+}
+
+#navContent li{
+    width: auto;
+    display: inline-block;
+    padding: 5px .8em;
+}
+
+#navContent li a{
+    padding: 5px 2.4em;
+}
+
+
+
+

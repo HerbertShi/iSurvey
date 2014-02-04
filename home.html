@@ -1,0 +1,27 @@
+﻿<div id="header"></div>
+<div id="navContent">
+    <ul id="nav">
+        {{each navMenus}}
+        <li menuHref="${$value.href}">
+            <a href="#">${$value.name}</a>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+<div id="mainContent"></div>
+
+<script type="text/javascript">
+    $("#nav").menu({
+        select: function(event, ui) {
+            $(this).find("li").removeClass("ui-state-active");
+            ui.item.addClass("ui-state-active");
+            ui.item.find("a").removeClass("ui-state-focus");
+            $("#mainContent").tmp(ui.item.attr("menuHref"));
+
+        },focus:function(){
+            
+        },blur:function(){
+            
+        }
+    });
+</script>
