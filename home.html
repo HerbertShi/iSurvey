@@ -11,16 +11,5 @@
 <div id="mainContent"></div>
 
 <script type="text/javascript">
-    $("#nav").menu({
-        select: function(event, ui) {
-            $(this).find("a").removeClass("current");
-            ui.item.find("a").addClass("current");
-            $("#mainContent").tmp(ui.item.attr("menuHref"));
-
-        },focus:function(){
-            
-        },blur:function(){
-            
-        }
-    });
+    
 </script>

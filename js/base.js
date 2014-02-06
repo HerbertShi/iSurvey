@@ -83,11 +83,14 @@ var gender ={
 ;
 (function($) {
     $.fn.extend({
-        tmp: function(url, data) {
+        tmp: function(url, data, callback) {
             var _this = this;
             $('<div></div>').load(url, function() {
                 $(_this).empty();
                 $(this).tmpl(data).appendTo($(_this));
+                if (callback) {
+                    callback();
+                }
             });
         }
     });

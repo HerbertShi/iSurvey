@@ -29,14 +29,24 @@
                 $("#loading").hide();
             });
 
-            $("#main").tmp("home.html",{
-                navMenus:[{
-                    name:"档案管理",
-                    href:"document/index.html"
-                },{
-                    name:"问卷管理",
-                    href:"survey/index.html"
+            $("#main").tmp("home.html", {
+                navMenus: [{
+                    name: "档案管理",
+                    href: "document/index.html"
+                }, {
+                    name: "问卷管理",
+                    href: "survey/index.html"
                 }]
+            }, function() {
+                $("#nav").menu({
+                    select: function(event, ui) {
+                        $(this).find("a[role=menuitem]").removeClass("current");
+                        ui.item.children("a[role=menuitem]").addClass("current");
+                        $("#mainContent").tmp(ui.item.attr("menuHref"));
+
+                    }
+                });
+                $("#nav").find( ".ui-menu-item:first" ).click();
             });
         });
     </script>
