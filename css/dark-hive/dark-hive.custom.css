@@ -1,0 +1,18 @@
+@import url(jquery-ui-1.10.4.custom.css);
+
+
+#nav.ui-menu .ui-menu-item{
+    width: auto;
+    display: inline-block;
+    padding: 5px .8em;
+}
+
+#nav.ui-menu .ui-menu-item a{
+    padding: 5px 2.4em;
+}
+
+#nav.ui-menu .ui-menu-item .current {
+    background: #0972a5 url(images/ui-bg_highlight-hard_20_0972a5_1x100.png) 50% 50% repeat-x;
+    font-weight: normal;
+    color: #ffffff;
+}

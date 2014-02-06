@@ -13,9 +13,8 @@
 <script type="text/javascript">
     $("#nav").menu({
         select: function(event, ui) {
-            $(this).find("li").removeClass("ui-state-active");
-            ui.item.addClass("ui-state-active");
-            ui.item.find("a").removeClass("ui-state-focus");
+            $(this).find("a").removeClass("current");
+            ui.item.find("a").addClass("current");
             $("#mainContent").tmp(ui.item.attr("menuHref"));
 
         },focus:function(){
