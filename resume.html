@@ -13,11 +13,21 @@
     <script type="text/javascript" src="js/base.js"></script>
 
 <style>
-    .ui-menu { position: absolute; width: auto; z-index: 10;height: 300px; overflow: auto;}
+    .ui-menu { position: absolute; min-width: 150px; z-index: 10;max-height: 300px; overflow: auto;}
   </style>
     <script>
         $(function() {
-            $("#select").button({
+            $("#birthday").datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $("#submit").button();
+            $("#gender").buttonset();
+
+
+            $(".province").button({
                 icons: {
                     secondary: "ui-icon-triangle-1-s"
                 }
@@ -31,44 +41,62 @@
                     at: "left bottom",
                     of: this
                 }).find("a[role=menuitem]").one("click", function() {
+                    menu.prev().val($(this).parent().val()).button("option", "label", $(this).html()).siblings(".city,.district").val("").button("option", "label", "---请选择---");
+                });
+                $(document).one("click", function() {
+                    menu.hide();
+                });
+                return false;
+            }).val("").css("min-width","150px").next().hide();
+
+            $(".city").button({
+                icons: {
+                    secondary: "ui-icon-triangle-1-s"
+                }
+            }).click(function() {
+                var menu = $(this).next().empty();
+                $(areaData["city"]).each(function() {
+                    if ($(menu.siblings(".province")).val()[0] == this.code[0] && $(menu.siblings(".province")).val()[1] == this.code[1]) {
+                        $("<li value='" + this.code + "'><a>" + this.name + "</a></li>").appendTo(menu);
+                    }
+                });
+                menu.menu().menu("refresh").show().position({
+                    my: "left top",
+                    at: "left bottom",
+                    of: this
+                }).find("a[role=menuitem]").one("click", function() {
+                    menu.prev().val($(this).parent().val()).button("option", "label", $(this).html()).siblings(".city").val("").button("option", "label", "---请选择---");
+                });
+                $(document).one("click", function() {
+                    menu.hide();
+                });
+                return false;
+            }).val("").css("min-width","150px").next().hide();
+
+            $(".district").button({
+                icons: {
+                    secondary: "ui-icon-triangle-1-s"
+                }
+            }).click(function() {
+                var menu = $(this).next().empty();
+                $(areaData["district"]).each(function() {
+                    if ($(menu.siblings(".city")).val()[0] == this.code[0] && $(menu.siblings(".city")).val()[1] == this.code[1] && $(menu.siblings(".city")).val()[2] == this.code[2] && $(menu.siblings(".city")).val()[3] == this.code[3]) {
+                        $("<li value='" + this.code + "'><a>" + this.name + "</a></li>").appendTo(menu);
+                    }
+                });
+                menu.menu().menu("refresh").show().position({
+                    my: "left top",
+                    at: "left bottom",
+                    of: this
+                }).find("a[role=menuitem]").one("click", function() {
                     menu.prev().val($(this).parent().val()).button("option", "label", $(this).html());
                 });
                 $(document).one("click", function() {
                     menu.hide();
                 });
                 return false;
-            }).next().hide();
+            }).val("").css("min-width","150px").next().hide();
 
-            $("#birthday").datepicker({
-                dateFormat: "yy-mm-dd",
-                changeMonth: true,
-                changeYear: true
-            });
-
-            $("#submit").button();
-            $("#gender").buttonset();
-
-            $(areaData["province"]).each(function() {
-                $("<option value='" + this.code + "'>" + this.name + "</option>").appendTo($(".province"));
-            });
-
-            $(".province").change(function(e) {
-                $(this).next().children(":gt(0)").remove();
-                $(areaData["city"]).each(function() {
-                    if ($(e.target).val()[0] == this.code[0] && $(e.target).val()[1] == this.code[1]) {
-                        $("<option value='" + this.code + "'>" + this.name + "</option>").appendTo($(e.target).next());
-                    }
-                });
-            });
-
-            $(".city").change(function(e) {
-                $(this).next().children(":gt(0)").remove();
-                $(areaData["district"]).each(function() {
-                    if ($(e.target).val()[0] == this.code[0] && $(e.target).val()[1] == this.code[1] && $(e.target).val()[2] == this.code[2] && $(e.target).val()[3] == this.code[3]) {
-                        $("<option value='" + this.code + "'>" + this.name + "</option>").appendTo($(e.target).next());
-                    }
-                });
-            });
 
             $("#submit").click(function() {
                 if ($("#name").val() == "") {
@@ -132,8 +160,6 @@
 <div class="wrapper">
     <div class="header">简历提交</div>
     <div class="main">
-        <button id="select">---请选择---</button>
-        <ul></ul>
         <table>
             <tr>
                 <td>姓名</td>
@@ -148,7 +174,7 @@
                 <td>
                     <input id="birthday" type="text" />
                 </td>   
-                                <td>性别</td>
+                    <td>性别</td>
                 <td>
                     <div id="gender">
                         <input type="radio" id="radio1" name="gender" checked="checked" value="m">                    
@@ -161,31 +187,34 @@
             <tr>
                 <td>户籍所在地</td>
                 <td colspan="3">
-                    <select id="homeProvince" class="province">
-                        <option value="">---请选择---</option>
-                    </select>
-                    <select id="homeCity" class="city">
-                        <option value="">---请选择---</option>
-                    </select>
-                    <select id="homeDistrict" class="district">
-                        <option value="">---请选择---</option>
-                    </select>
-                </td>
+                    <!--                     <select id="homeProvince" class="province">            
+                    <option value="">---请选择---</option>
+                </select>
+                <select id="homeCity" class="city">
+                    <option value="">---请选择---</option>
+                </select>
+                <select id="homeDistrict" class="district">
+                    <option value="">---请选择---</option>
+                </select>
+                -->
+                <button id="homeProvince" class="province">---请选择---</button>
+                <ul></ul>
+                <button id="homeCity" class="city">---请选择---</button>
+                <ul></ul>
+                <button id="homeDistrict" class="district">---请选择---</button>
+                <ul></ul>
+            </td>
             </tr>
             <tr>
                 <td>现居住地</td>
                 <td colspan="3">
-                    <select id="currentProvince" class="province">
-                        <option value="">---请选择---</option>
-                    </select>
-                    <select id="currentCity" class="city">
-                        <option value="">---请选择---</option>
-                    </select>
-                    <select id="currentDistrict"class="district">
-                        <option value="">---请选择---</option>
-                    </select>
+                    <button id="currentProvince" class="province">---请选择---</button>
+                    <ul></ul>
+                    <button id="currentCity" class="city">---请选择---</button>
+                    <ul></ul>
+                    <button id="currentDistrict" class="district">---请选择---</button>
+                    <ul></ul>
                 </td>
-
             </tr>
             <tr>
                 <td>简历上传 （word）</td>
