@@ -1,3 +1,19 @@
-﻿<div id="${id}">
-    ${aaa}
+﻿<div id="${id}">${aaa}</div>
+${bbb}
+<div id="documentIndex">
+    <div id="documentSearch"></div>
+    <div id="documentTable">
+        <table>
+            <thead>
+                <tr>
+                    {{each(prop, val) aaa}}
+                    <th>${bbb}</th>
+                    {{/each}}
+                </tr>
+
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="documentPager"></div>
 </div>

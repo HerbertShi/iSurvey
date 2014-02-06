@@ -8,7 +8,10 @@
 
 #header{
     background-color: #ccc;
-    height:120px;
+    height: 120px;
 }
 
+table.general_list{
+    width: 100%;
+}
 

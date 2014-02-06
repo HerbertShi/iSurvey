@@ -8,47 +8,12 @@
     <link href="css/base.css" rel="stylesheet">
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/jquery-ui-1.10.4.custom.js"></script>
-
+    <script type="text/javascript" src="js/lib/province_city_district/json-array-of-province.js"></script>
     <script type="text/javascript" src="js/jquery.tmpl.js"></script>
     <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <script>
-        $(function(){
-            $("<div></div>").attr("id","loading").css({
-                "position": "absolute",
-                "left": 0,
-                "top": 0,
-                "width": "100%",
-                "height": "100%",
-                "background":"url(images/loading.gif) center center no-repeat",
-                "display":"none"
-            }).appendTo("body");
-            $(document).ajaxStart(function() {
-                $("#loading").show();
-            });
-            $(document).ajaxStop(function() {
-                $("#loading").hide();
-            });
-
-            $("#main").tmp("home.html", {
-                navMenus: [{
-                    name: "档案管理",
-                    href: "document/index.html"
-                }, {
-                    name: "问卷管理",
-                    href: "survey/index.html"
-                }]
-            }, function() {
-                $("#nav").menu({
-                    select: function(event, ui) {
-                        $(this).find("a[role=menuitem]").removeClass("current");
-                        ui.item.children("a[role=menuitem]").addClass("current");
-                        $("#mainContent").tmp(ui.item.attr("menuHref"));
-
-                    }
-                });
-                $("#nav").find( ".ui-menu-item:first" ).click();
-            });
-        });
+    
     </script>
 </head>
 <body>

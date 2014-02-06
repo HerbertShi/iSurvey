@@ -80,13 +80,25 @@ var gender ={
     "f":"女"
 }
 
+var mockup_user_list = {
+    listCount : 15,
+    list:[{
+     name:"张三",
+     gender:"m",
+     birthday:"1983-12-23",
+     homeLocation:"340000,340800,",
+     currentLocation:""
+    }]
+}
+
 ;
 (function($) {
     $.fn.extend({
         tmp: function(url, data, callback) {
             var _this = this;
-            $('<div></div>').load(url, function() {
+            $('<script></script>').load(url, function() {
                 $(_this).empty();
+                $(this).attr("type","text/x-jquery-tmpl");
                 $(this).tmpl(data).appendTo($(_this));
                 if (callback) {
                     callback();
@@ -95,3 +107,30 @@ var gender ={
         }
     });
 })(jQuery);
+
+$(function() {
+    $("<div></div>").attr("id", "loading").css({
+        "position": "absolute",
+        "left": 0,
+        "top": 0,
+        "width": "100%",
+        "height": "100%",
+        "background": "url(images/loading.gif) center center no-repeat",
+        "display": "none"
+    }).appendTo("body");
+    $(document).ajaxStart(function() {
+        $("#loading").show();
+    });
+    $(document).ajaxStop(function() {
+        $("#loading").hide();
+    });
+    $(document).ajaxError(function(event, jqxhr, settings, exception) {
+        if (exception == "Not Found") {
+            switch (settings.url) {
+                case "api/user?searchCondition=&pageSize=10&startIndex=0&orderName=&orderType=":
+                    settings.success();
+                    break;
+            }
+        }
+    });
+});

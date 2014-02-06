@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>提交简历</title>
+    <link href="css/dark-hive/dark-hive.custom.css" rel="stylesheet">
+    <link href="css/resume.css" type="text/css" rel="stylesheet" rev="stylesheet" />
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/jquery-ui-1.10.4.custom.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/lib/province_city_district/json-array-of-province.js"></script>
+    <script type="text/javascript" src="js/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+
+<style>
+    .ui-menu { position: absolute; width: auto; z-index: 10;height: 300px; overflow: auto;}
+  </style>
+    <script>
+        $(function() {
+            $("#select").button({
+                icons: {
+                    secondary: "ui-icon-triangle-1-s"
+                }
+            }).click(function() {
+                var menu = $(this).next().empty();
+                $(areaData["province"]).each(function() {
+                    $("<li value='" + this.code + "'><a>" + this.name + "</a></li>").appendTo(menu);
+                });
+                menu.menu().menu("refresh").show().position({
+                    my: "left top",
+                    at: "left bottom",
+                    of: this
+                }).find("a[role=menuitem]").one("click", function() {
+                    menu.prev().val($(this).parent().val()).button("option", "label", $(this).html());
+                });
+                $(document).one("click", function() {
+                    menu.hide();
+                });
+                return false;
+            }).next().hide();
+
+            $("#birthday").datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $("#submit").button();
+            $("#gender").buttonset();
+
+            $(areaData["province"]).each(function() {
+                $("<option value='" + this.code + "'>" + this.name + "</option>").appendTo($(".province"));
+            });
+
+            $(".province").change(function(e) {
+                $(this).next().children(":gt(0)").remove();
+                $(areaData["city"]).each(function() {
+                    if ($(e.target).val()[0] == this.code[0] && $(e.target).val()[1] == this.code[1]) {
+                        $("<option value='" + this.code + "'>" + this.name + "</option>").appendTo($(e.target).next());
+                    }
+                });
+            });
+
+            $(".city").change(function(e) {
+                $(this).next().children(":gt(0)").remove();
+                $(areaData["district"]).each(function() {
+                    if ($(e.target).val()[0] == this.code[0] && $(e.target).val()[1] == this.code[1] && $(e.target).val()[2] == this.code[2] && $(e.target).val()[3] == this.code[3]) {
+                        $("<option value='" + this.code + "'>" + this.name + "</option>").appendTo($(e.target).next());
+                    }
+                });
+            });
+
+            $("#submit").click(function() {
+                if ($("#name").val() == "") {
+                    alert("姓名不能为空！");
+                    return;
+                }
+
+                if ($("#resume").val() == "" || $("#resume").val().indexOf(".") < 0) {
+                    alert("简历不能为空！");
+                    return;
+                }
+
+                if ($("#homeDistrict").val() == "") {
+                    alert("户籍所在地不能为空！");
+                    return;
+                }
+
+                if ($("#currentDistrict").val() == "") {
+                    alert("现居住地不能为空！");
+                    return;
+                }
+
+                if ($("#resume").val().substr($("#resume").val().lastIndexOf(".") + 1) != "doc" && $("#resume").val().substr($("#resume").val().lastIndexOf(".") + 1) != "docx") {
+                    alert("简历格式不正确！");
+                    return;
+                }
+
+                var files = $("#resume").get(0).files;
+                if (files.length > 0) {
+                    var data = new FormData();
+                    for (i = 0; i < files.length; i++) {
+                        data.append("file" + i, files[i]);
+                    }
+                    data.append("name", $("#name").val());
+                    data.append("gender", $("input[type=radio]").val());
+                    data.append("birthday", $("#birthday").val());
+                    data.append("homeLocation", $("#homeProvince").val() + "," + $("#homeCity").val() + "," + $("#homeDistrict").val());
+                    data.append("currentLocation", $("#currentProvince").val() + "," + $("#currentCity").val() + "," +$("#currentDistrict").val());
+                    $.ajax({
+                        type: "POST",
+                        url: requestUrl.user,
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function(results) {
+                            if (results > 0) {
+                                $.cookie("userId", results);
+                                alert("提交成功，确认后进入答题！");
+                                location.href = "answer.html"
+                            } else {
+                                alert("提交失败！");
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header">简历提交</div>
+    <div class="main">
+        <button id="select">---请选择---</button>
+        <ul></ul>
+        <table>
+            <tr>
+                <td>姓名</td>
+                <td colspan="3">
+                    <input id="name" type="text" />
+                </td>
+
+
+            </tr>
+            <tr>
+                                             <td>出生日期</td>
+                <td>
+                    <input id="birthday" type="text" />
+                </td>   
+                                <td>性别</td>
+                <td>
+                    <div id="gender">
+                        <input type="radio" id="radio1" name="gender" checked="checked" value="m">                    
+                        <label for="radio1">男</label>
+                        <input type="radio" id="radio2" name="gender" value="f">
+                        <label for="radio2">女</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>户籍所在地</td>
+                <td colspan="3">
+                    <select id="homeProvince" class="province">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="homeCity" class="city">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="homeDistrict" class="district">
+                        <option value="">---请选择---</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>现居住地</td>
+                <td colspan="3">
+                    <select id="currentProvince" class="province">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="currentCity" class="city">
+                        <option value="">---请选择---</option>
+                    </select>
+                    <select id="currentDistrict"class="district">
+                        <option value="">---请选择---</option>
+                    </select>
+                </td>
+
+            </tr>
+            <tr>
+                <td>简历上传 （word）</td>
+                <td colspan="3">
+                    <input id="resume" type="file"/>
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input id="submit" type="button" value="提交" />
+                </td>
+
+            </tr>
+        </table>
+
+    </div>
+</div>
+</body>
+<!-- InstanceEnd -->
+</html>

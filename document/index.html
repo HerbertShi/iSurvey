@@ -1,5 +1,18 @@
-﻿<div id="aaa">aaa</div>
-
-<script type="text/javascript">
-//alert($("#aaa").size());
-</script>
+﻿<div id="documentIndex">
+    <div id="documentSearch">
+        <a id="createUser">&nbsp;</a>
+    </div>
+    <div id="documentTable">
+        <table id="userList" class="general_list">
+            <thead>
+                <tr>
+                    {{each theads}}
+                    <th>${$value.name}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="documentPager"></div>
+</div>
