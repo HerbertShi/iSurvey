@@ -94,18 +94,49 @@ var mockup_user_list = {
 ;
 (function($) {
     $.fn.extend({
+        //载入模板，并执行回调
         tmp: function(url, data, callback) {
             var _this = this;
-            $('<script></script>').load(url, function() {
+            $('<script></script>').load("view/" + url, function() {
                 $(_this).empty();
-                $(this).attr("type","text/x-jquery-tmpl");
+                $(this).attr("type", "text/x-jquery-tmpl");
                 $(this).tmpl(data).appendTo($(_this));
                 if (callback) {
                     callback();
                 }
             });
+        },
+
+        pager: function(url, pageSize, pagerCssClass) {
+
+
+            var _this = this;
+            var _pagerCssClass = pagerCssClass || "pagination";
+            var _pageSize = pageSize || 10;
+            var _startIndex = 0;
+            var _orderName = "";
+            var _orderType = "";
+
+            $("<div></div>").addClass(_pagerCssClass).append("");
+
+            var listUser = function() {
+                $.getJSON(requestUrl.user, {
+                    searchCondition: "",
+                    pageSize: _pageSize,
+                    startIndex: _startIndex,
+                    orderName: _orderName,
+                    orderType: _orderType
+                }, function(data) {
+                    $(_this).find("tbody").empty();
+
+                    $(".pagination").hide();
+                    $("#listCount").html(data.listCount);
+                    $("#pageSize").html(_pageSize);
+                });
+            }
         }
     });
+
 })(jQuery);
 
 $(function() {
